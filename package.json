@@ -4,7 +4,7 @@
     "name": "Gabriel Angelo de Sousa Silva",
     "email": "gabriel_angelo100@hotmail.com"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./dist/vuematerializecssSelectFilter.common.js",
   "description": "Biblioteca/Componente de Seleção com Filtro criado em Vue e MaterializeCSS.",
   "scripts": {
