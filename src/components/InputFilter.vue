@@ -6,6 +6,7 @@
                     <input id="search"
                            type="search"
                            :placeholder="placeholder"
+                           :disabled="disabled"
                            v-model="textFilter"
                            @focus="inputFocus()"
                            @focusout="inputFocusOut()">
@@ -26,12 +27,16 @@
         props: {
             placeholder: {
                 type: String,
-                default: 'Placeholder'
+                default: ''
             },
             pTextFilter: {
                 type: String,
                 default: ''
             },
+            disabled: {
+                type: Boolean,
+                default: false
+            }
         },
         data () {
             return {

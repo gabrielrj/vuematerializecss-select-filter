@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <input-filter :p-text-filter.sync="textFilter"></input-filter>
-    <list-select :list-itens="listItens" @optionSelected="optionSelected"></list-select>
+    <input-filter :p-text-filter.sync="textFilter" :placeholder="placeholder" :disabled="disabled"></input-filter>
+    <list-select v-show="!disabled" :list-itens="listItens" @optionSelected="optionSelected"></list-select>
   </div>
 </template>
 
@@ -12,7 +12,7 @@
   import ListSelect from './components/ListSelect'
 
   export default {
-    name: 'App',
+    name: 'VueMaterialCssSelectFilter',
     components: {
       InputFilter,
       ListSelect
@@ -26,6 +26,16 @@
       items: {
         type: Array,
         default: null,
+      },
+
+      placeholder: {
+        type: String,
+        default: "Placeholder",
+      },
+
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
     provide() {
@@ -54,11 +64,14 @@
       },
 
       valueSelected(newValue){
+        if(valueSelected == null || valueSelected == undefined)
+          this.textFilter = ''
         this.$emit('update:value', newValue)
       },
 
       value(newValue){
         this.valueSelected = newValue
+        this.itemSelected = null
       },
 
       textFilter(newValue){
