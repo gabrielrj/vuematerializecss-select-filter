@@ -1,10 +1,16 @@
 {
   "name": "vuematerializecss-select-filter",
-  "version": "0.1.0",
-  "private": true,
+  "author": {
+    "name": "Gabriel Angelo de Sousa Silva",
+    "email": "gabriel_angelo100@hotmail.com"
+  },
+  "version": "0.1.1",
+  "main": "./dist/vuematerializecssSelectFilter.common.js",
+  "description": "Biblioteca/Componente de Seleção com Filtro criado em Vue e MaterializeCSS.",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:npm": "vue-cli-service build --target lib --name vuematerializecssSelectFilter src/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -40,5 +46,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
+  ],
+  "files": [
+    "dist/*"
   ]
 }
