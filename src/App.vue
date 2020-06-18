@@ -64,7 +64,7 @@
       },
 
       valueSelected(newValue){
-        if(valueSelected == null || valueSelected == undefined)
+        if(this.valueSelected == null || this.valueSelected == undefined)
           this.textFilter = ''
         this.$emit('update:value', newValue)
       },
