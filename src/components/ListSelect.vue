@@ -1,9 +1,13 @@
 <template>
-    <div style="position: relative">
+    <div class="list-select">
         <Transition name="fade">
-            <div v-show="toogle" class="collection select-filter z-depth-2" v-if="(listItens != undefined && listItens != null) && filterListWithText.length > 0">
+            <ul v-show="toogle"
+                class="collection select-filter z-depth-2"
+                v-if="(listItens != undefined && listItens != null) && filterListWithText.length > 0">
+
                 <a v-for="(item, item_i) in filterListWithText"
                    class="collection-item select-filter-item black-text waves-effect waves-block"
+                   :class="{'active' : (itemSelected != null && item.value === itemSelected.value) , 'selected' : (itemFocused != null && item.value === itemFocused.value) }"
                    :value="item.value"
                    :key="'list_item_key_' + item_i"
                    @click="optionSelected(item)">
@@ -11,7 +15,8 @@
                        v-if="item.hasOwnProperty('icon') && item.icon != undefined && item.icon != null">{{item.icon}}</i>
                     {{item.text}}
                 </a>
-            </div>
+
+            </ul>
         </Transition>
     </div>
 </template>
@@ -24,12 +29,25 @@
             listItens: {
                 type: Array,
                 default: undefined
-            }
+            },
+            pItemSelected: {
+                type: Object,
+                default: null
+            },
         },
         data() {
             return {
-                itensForList: [],
+                itemSelected: this.pItemSelected,
+                itemFocused: null,
             }
+        },
+        watch: {
+            itemSelected(newValue){
+                this.$emit('update:pItemSelected', newValue)
+            },
+            pItemSelected(newValue){
+                this.itemSelected = newValue
+            },
         },
         computed: {
             toogle(){
@@ -56,7 +74,48 @@
         },
         methods:{
             optionSelected(item){
-                this.$emit('optionSelected', item)
+                this.itemSelected = item
+            },
+            setFocusNextOrPrevItem(type){
+                let itens = this.filterListWithText
+
+                if(itens.length > 0){
+                    if(type == 'down'){
+
+                        if(this.itemFocused == null)
+                            this.itemFocused = itens[0]
+                        else{
+                            let indexFocusedItem = this.filterListWithText.findIndex((item) => {
+                                return item.value === this.itemFocused.value
+                            })
+
+                            if(this.filterListWithText.length > (indexFocusedItem + 1)){
+                                this.itemFocused = itens[indexFocusedItem + 1]
+                            }
+                        }
+
+                    }else{
+
+                        if(this.itemFocused != null) {
+                            let indexFocusedItem = this.filterListWithText.findIndex((item) => {
+                                return item.value === this.itemFocused.value
+                            })
+
+                            if(this.filterListWithText.length > 0){
+                                this.itemFocused = itens[indexFocusedItem - 1]
+                            }
+                        }
+                    }
+
+                }else
+                    this.itemFocused = null
+            },
+            selectOptionItemWithEnterKey(){
+                if(this.itemFocused != null){
+                    this.itemSelected = this.itemFocused
+                    this.itemFocused = null
+                    this.principal.closeListSelect()
+                }
             }
         }
 
@@ -64,6 +123,10 @@
 </script>
 
 <style scoped>
+    .list-select {
+        position: relative;
+    }
+
     .select-filter {
         max-height: 200px;
         overflow-y: auto;
@@ -71,11 +134,21 @@
         z-index: 9999;
         left: 0;
         right: 0;
+        margin-top: 0;
     }
+
     a.select-filter-item {
         border: none;
         cursor: pointer !important;
 
+    }
+
+    a.select-filter-item.active {
+        background-color: #9e9e9e !important;
+    }
+
+    a.select-filter-item.selected {
+        background-color: #bdbdbd  !important;
     }
 
     .fade-enter-active, .fade-leave-active {

@@ -1,15 +1,16 @@
 <template>
     <div>
         <div class="nav-wrapper card-panel">
-            <form>
+            <form @submit.prevent>
                 <div class="input-field">
                     <input id="search"
                            type="search"
+                           @keyup.enter="inputSelectOptionItemWithEnterKey($event)"
+                           @keyup.up="inputKeyUppedDownClicked('up')"
+                           @keyup.down="inputKeyUppedDownClicked('down')"
                            :placeholder="placeholder"
                            :disabled="disabled"
-                           v-model="textFilter"
-                           @focus="inputFocus()"
-                           @focusout="inputFocusOut()">
+                           v-model="textFilter">
                     <label class="label-icon" for="search">
                         <i class="material-icons">search</i>
                     </label>
@@ -40,7 +41,7 @@
         },
         data () {
             return {
-                textFilter: null
+                textFilter: null,
             }
         },
         watch: {
@@ -52,14 +53,15 @@
             }
         },
         methods: {
-            inputFocus(){
-                this.principal.openListSelect()
-            },
-            inputFocusOut(){
-                this.principal.closeListSelect()
-            },
             inputClear(){
                 this.textFilter = ''
+            },
+            inputKeyUppedDownClicked(type){
+                this.principal.inputSetFocusInListSelect(type)
+            },
+            inputSelectOptionItemWithEnterKey(event){
+                event.target.blur()
+                this.principal.selectOptionItemWithEnterKey()
             }
 
         }
@@ -69,5 +71,6 @@
 <style scoped>
     div.nav-wrapper.card-panel {
         padding: 1px !important;
+        margin-bottom: 0;
     }
 </style>

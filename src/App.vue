@@ -1,124 +1,28 @@
 <template>
   <div id="app">
-    <input-filter :p-text-filter.sync="textFilter" :placeholder="placeholder" :disabled="disabled"></input-filter>
-    <list-select v-show="!disabled" :list-itens="listItens" @optionSelected="optionSelected"></list-select>
+    <Principal :items="itens" v-model="valueSel"></Principal>
   </div>
 </template>
 
-<script>
 
-  import M from 'materialize-css'
-  import InputFilter from './components/InputFilter'
-  import ListSelect from './components/ListSelect'
+<script>
+  import Principal from "./components/Principal";
 
   export default {
-    name: 'VueMaterialCssSelectFilter',
+    name: 'App',
     components: {
-      InputFilter,
-      ListSelect
+      // eslint-disable-next-line vue/no-unused-components
+      Principal
     },
-    props: {
-      value: {
-        type: [String, Number],
-        default: null
-      },
-
-      items: {
-        type: Array,
-        default: null,
-      },
-
-      placeholder: {
-        type: String,
-        default: "Placeholder",
-      },
-
-      disabled: {
-        type: Boolean,
-        default: false
-      }
-    },
-    provide() {
-      return {
-        principal: this,
-      };
-    },
-
     data() {
       return {
-        listItens: (this.items != null && this.items != undefined) ? this.items : null,
+        itens: [{value: 0, text: 'Gabriel Angelo', icon: 'android'},
+          {value: 1, text: 'Izabelle Mota', icon: 'assignment_ind'},
+          {value: 2, text: 'Eduardo Garcia', icon: 'attach_money'},
+          {value: 3, text: 'Luciano Menezes', icon: ''},
+          {value: 4, text: 'Geraldo Militão', icon: ''}],
 
-        openList: false,
-
-        textFilter: '',
-
-        valueSelected: this.value,
-
-        itemSelected: null,
-      }
-    },
-
-    watch: {
-      items(newValue){
-        this.listItens = (newValue != null && newValue != undefined) ? newValue : null
-      },
-
-      valueSelected(newValue){
-        if(this.valueSelected == null || this.valueSelected == undefined)
-          this.textFilter = ''
-        this.$emit('update:value', newValue)
-      },
-
-      value(newValue){
-        this.valueSelected = newValue
-        this.itemSelected = null
-      },
-
-      textFilter(newValue){
-        if(this.itemSelected != null && this.itemSelected != undefined){
-          if(newValue.length != this.itemSelected.text.length){
-            this.itemSelected = null
-            this.valueSelected = null
-          }
-        }
-      },
-
-      itemSelected(newValue){
-        if(newValue != null){
-          this.valueSelected = newValue.value
-          this.textFilter = newValue.text
-        }
-      },
-
-      openList(newValue){
-        if(newValue == false)
-          this.$emit('listClosed', true)
-        else
-          this.$emit('listOpenned', true)
-      }
-    },
-
-    mounted () {
-      M.AutoInit()
-    },
-
-    methods: {
-      openListSelect(){
-        this.openList = true
-      },
-      closeListSelect(){
-        this.openList = false
-      },
-      listIsOpenned(){
-        return this.openList
-      },
-      returnTextFilter(){
-        return this.textFilter
-      },
-      optionSelected(item){
-        this.itemSelected = item
-
-        this.$emit('itemSelectedChange', item)
+        valueSel: null,
       }
     }
   }
