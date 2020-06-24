@@ -9,6 +9,7 @@
                    class="collection-item select-filter-item black-text waves-effect waves-block"
                    :class="{'active' : (itemSelected != null && item.value === itemSelected.value) , 'selected' : (itemFocused != null && item.value === itemFocused.value) }"
                    :value="item.value"
+                   :ref="'option_item_' + item.value"
                    :key="'list_item_key_' + item_i"
                    @click="optionSelected(item)">
                     <i class="material-icons prefix left"
@@ -82,15 +83,17 @@
                 if(itens.length > 0){
                     if(type == 'down'){
 
-                        if(this.itemFocused == null)
+                        if(this.itemFocused == null){
                             this.itemFocused = itens[0]
-                        else{
+                            this.$refs['option_item_' + this.itemFocused.value][0].focus()
+                        } else{
                             let indexFocusedItem = this.filterListWithText.findIndex((item) => {
                                 return item.value === this.itemFocused.value
                             })
 
                             if(this.filterListWithText.length > (indexFocusedItem + 1)){
                                 this.itemFocused = itens[indexFocusedItem + 1]
+                                this.$refs['option_item_' + this.itemFocused.value][0].focus()
                             }
                         }
 
@@ -101,8 +104,9 @@
                                 return item.value === this.itemFocused.value
                             })
 
-                            if(this.filterListWithText.length > 0){
+                            if((indexFocusedItem - 1) !== -1){
                                 this.itemFocused = itens[indexFocusedItem - 1]
+                                this.$refs['option_item_' + this.itemFocused.value][0].focus()
                             }
                         }
                     }
